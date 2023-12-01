@@ -19,4 +19,6 @@ public interface TrackService {
     void delete(Integer id);
     Optional<Track> findById(Integer id);
     List<Track> getTracksByIds(List<Integer> trackIds);
+    List<Track> findAllTracksByArtistGenre(Integer artistId, Integer genreId);
+    public List<Track> addTracksToList(Integer artistId, Integer genreId, Double minutes);
 }

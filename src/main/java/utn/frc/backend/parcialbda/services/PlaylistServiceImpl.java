@@ -7,6 +7,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import utn.frc.backend.parcialbda.model.Playlist;
 import utn.frc.backend.parcialbda.model.Track;
+import utn.frc.backend.parcialbda.repositories.ArtistRepository;
 import utn.frc.backend.parcialbda.repositories.IdentifierRepository;
 import utn.frc.backend.parcialbda.repositories.PlaylistRepository;
 import utn.frc.backend.parcialbda.repositories.TrackRepository;
@@ -23,6 +24,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     PlaylistRepository playlistRepository;
     IdentifierRepository identifierRepository;
     TrackRepository trackRepository;
+    TrackService trackService;
 
     @Override
     public List<Playlist> findAll() {
@@ -30,12 +32,21 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
+    public Playlist create(String name, Integer artistId, Integer genreId, Double minutes) {
+        val playlistId = identifierRepository.nextValue(Playlist.TABLE_NAME);
+        val tracks = trackService.addTracksToList(artistId, genreId, minutes);
+        val newPlaylist = new Playlist(playlistId, name, tracks);
+        return playlistRepository.save(newPlaylist);
+    }
+
+    /*
+    @Override
     public Playlist create(String name, List<Track> tracks) {
         val playlistId = identifierRepository.nextValue(Playlist.TABLE_NAME);
         val newPlaylist = new Playlist(playlistId, name, tracks);
         return playlistRepository.save(newPlaylist);
     }
-
+    */
 
 
     @Override

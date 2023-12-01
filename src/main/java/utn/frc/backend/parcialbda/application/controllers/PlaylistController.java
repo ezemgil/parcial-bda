@@ -33,12 +33,36 @@ public class PlaylistController {
         }
     }
 
+    /*
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody CreatePlaylistRequest aRequest) {
         try {
             val playlist = playlistService.create(
                     aRequest.getTitle(),
                     trackService.getTracksByIds(aRequest.getTrackIds())
+            );
+            return ResponseHandler.success(PlaylistResponse.from(playlist));
+        } catch (IllegalArgumentException e) {
+            return ResponseHandler.badRequest(e.getMessage());
+        } catch (Exception e) {
+            return ResponseHandler.internalError();
+        }
+    }
+     */
+
+    /*
+            Crear un nuevo playlist en base a: nombre de la playlist, id de artista, id de género y una cantidad
+            de tiempo en minutos que agregue tracks del artista y genero a la nueva lista en orden aleatorio
+            hasta alcanzar el tiempo solicitado o se acaben los tracks disponibles
+     */
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody CreatePlaylistRequest aRequest) {
+        try {
+            val playlist = playlistService.create(
+                    aRequest.getTitle(),
+                    aRequest.getArtistId(),
+                    aRequest.getGenreId(),
+                    aRequest.getMinutes()
             );
             return ResponseHandler.success(PlaylistResponse.from(playlist));
         } catch (IllegalArgumentException e) {

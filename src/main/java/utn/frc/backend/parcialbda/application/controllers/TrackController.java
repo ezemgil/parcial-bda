@@ -10,6 +10,7 @@ import utn.frc.backend.parcialbda.application.ResponseHandler;
 import utn.frc.backend.parcialbda.application.request.CreateTrackRequest;
 import utn.frc.backend.parcialbda.application.request.UpdateTrackRequest;
 import utn.frc.backend.parcialbda.application.response.TrackResponse;
+import utn.frc.backend.parcialbda.application.response.TrackResponseParcial;
 import utn.frc.backend.parcialbda.services.interfaces.PlaylistService;
 import utn.frc.backend.parcialbda.services.interfaces.TrackService;
 
@@ -99,6 +100,21 @@ public class TrackController {
             return ResponseHandler.noContent();
         } catch (IllegalArgumentException e) {
             return ResponseHandler.badRequest(e.getMessage());
+        } catch (Exception e) {
+            return ResponseHandler.internalError();
+        }
+    }
+
+    @GetMapping("/{artistId}/{genreId}")
+    public ResponseEntity<Object> findAllTracksByArtistGenre(@PathVariable Integer artistId, @PathVariable Integer genreId) {
+        try {
+            val tracks = trackService.findAllTracksByArtistGenre(artistId, genreId)
+                    .stream()
+                    .map(TrackResponseParcial::from)
+                    .toList();
+            return ResponseHandler.success(tracks);
+        } catch (IllegalArgumentException e) {
+            return ResponseHandler.notFound();
         } catch (Exception e) {
             return ResponseHandler.internalError();
         }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PlaylistService {
     List<Playlist> findAll();
-    Playlist create(String name, List<Track> tracks);
+    Playlist create(String name, Integer artistId, Integer genreId, Double minutes);
     void update(Integer id, String name, List<Track> tracks);
     void delete(Integer id);
     Optional<Playlist> findById(Integer id);

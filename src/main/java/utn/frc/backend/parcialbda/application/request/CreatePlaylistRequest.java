@@ -14,7 +14,11 @@ import java.util.List;
 public class CreatePlaylistRequest {
     @NotNull(message = "Title is required")
     String title;
-    // @NotEmpty(message = "At least one trackId is required") -> En caso de que deba tener al menos una pista
-    @Nullable
-    List<Integer> trackIds;
+    @NotNull(message = "Artist name is required")
+    Integer artistId;
+    @NotNull(message = "Genre Id is required")
+    Integer genreId;
+    @NotNull(message = "Minutes is required")
+    @NotBlank(message = "Minutes is required")
+    Double minutes;
 }

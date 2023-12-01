@@ -17,13 +17,16 @@ import java.util.stream.Collectors;
 public class PlaylistResponse {
     Integer id;
     String name;
+    Double duration;
     List<String> tracks;
 
+    //  lista de tracks incluidos ordenados de mayor a menor según UnitPrice
     public static PlaylistResponse from(Playlist playlist) {
         return PlaylistResponse.builder()
                 .id(playlist.getId())
                 .name(playlist.getName())
                 .tracks(playlist.getTracks().stream().map(Track::getName).toList())
+                .duration(playlist.getTracks().stream().mapToDouble(Track::getMilliseconds).sum() / 60000)
                 .build();
     }
 

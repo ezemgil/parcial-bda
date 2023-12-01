@@ -14,6 +14,8 @@ import utn.frc.backend.parcialbda.services.interfaces.GenreService;
 import utn.frc.backend.parcialbda.services.interfaces.MediaTypeService;
 import utn.frc.backend.parcialbda.services.interfaces.TrackService;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,5 +72,31 @@ public class TrackServiceImpl implements TrackService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Track> findAllTracksByArtistGenre(Integer artistId, Integer genreId) {
+        return trackRepository.findAll()
+                .stream()
+                .filter(artist -> artist.getAlbum().getArtist().getId().equals(artistId))
+                .filter(genre -> genre.getGenre().getId().equals(genreId))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Track> addTracksToList(Integer artistId, Integer genreId, Double minutes) {
+        Double millisecods = minutes * 6000;
+        val trackList = new ArrayList<Track>();
+        val tracks = findAllTracksByArtistGenre(artistId, genreId);
+        while (millisecods > 0) {
+            val anyTrack = tracks.stream().findAny();
+            if (anyTrack.isEmpty()) {
+                break;
+            }
+            trackList.add(anyTrack.get());
+            millisecods -= anyTrack.get().getMilliseconds();
+        }
+        return trackList;
     }
 }
